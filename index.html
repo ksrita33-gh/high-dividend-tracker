@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本株 高配当トラッカー</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d2e;
+  --surface2: #22263a;
+  --border: #2a2d3e;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #6366f1;
+  --red: #ef4444;
+  --orange: #f97316;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --yellow: #eab308;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', 'Helvetica Neue', sans-serif; font-size: 14px; line-height: 1.5; min-height: 100vh; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { cursor: pointer; border: none; font-family: inherit; font-size: 13px; }
+
+/* ── Layout ── */
+.app { max-width: 1440px; margin: 0 auto; padding: 12px 16px 40px; }
+
+/* ── Header ── */
+header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+header h1 { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+.header-meta { font-size: 12px; color: var(--muted); }
+
+/* ── Stats Bar ── */
+.stats-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 18px; flex: 1 1 140px; }
+.stat-card .stat-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.stat-card .stat-value { font-size: 22px; font-weight: 700; }
+.stat-card .stat-value.red { color: var(--red); }
+.stat-card .stat-value.orange { color: var(--orange); }
+
+/* ── Market Panel ── */
+.market-panel { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.market-block { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; flex: 1 1 180px; }
+.market-block .mb-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.market-block .mb-value { font-size: 28px; font-weight: 800; }
+.market-block .mb-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.mb-value.vix-green { color: var(--green); }
+.mb-value.vix-orange { color: var(--orange); }
+.mb-value.vix-red { color: var(--red); }
+.tdr-input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 4px 8px; font-size: 18px; width: 90px; font-weight: 700; }
+.tdr-input.tdr-red { color: var(--red); }
+.tdr-input.tdr-green { color: var(--green); }
+.tdr-input.tdr-blue { color: var(--blue); }
+
+/* ── Controls ── */
+.controls { margin-bottom: 14px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.tab-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: 20px; padding: 5px 14px; transition: all 0.15s; font-size: 13px; }
+.tab-btn:hover { background: var(--surface2); color: var(--text); }
+.tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tab-btn .tab-count { font-size: 10px; opacity: 0.8; margin-left: 3px; }
+
+.filter-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filter-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+select, input[type="text"], input[type="number"], input[type="range"] {
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  border-radius: 6px; padding: 5px 10px; font-size: 13px; font-family: inherit;
+}
+select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.search-input { flex: 1 1 160px; }
+.result-info { font-size: 12px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+
+/* ── Cards Grid ── */
+#cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.card {
+  background: var(--surface); border: 2px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; cursor: pointer; transition: transform 0.12s, border-color 0.12s;
+  position: relative;
+}
+.card:hover { transform: translateY(-2px); }
+.card.border-red   { border-color: var(--red); }
+.card.border-orange{ border-color: var(--orange); }
+.card.border-blue  { border-color: var(--blue); }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+.card-code { font-size: 11px; color: var(--muted); }
+.card-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.card-yield { font-size: 22px; font-weight: 800; color: var(--muted); white-space: nowrap; margin-left: 8px; }
+.card-yield.high { color: var(--red); }
+.card-yield.mid  { color: var(--orange); }
+.card-yield.anomaly { color: var(--muted); font-size: 16px; }
+.card-price { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.card-change { font-size: 12px; margin-left: 6px; }
+.card-change.pos { color: var(--red); }
+.card-change.neg { color: var(--blue); }
+.card-sector { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; }
+.card-score { font-size: 11px; color: var(--muted); }
+.card-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tag-badge { font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 600; }
+.tag-holding  { background: rgba(99,102,241,0.25); color: #a5b4fc; }
+.tag-watch    { background: rgba(234,179,8,0.2); color: #fde047; }
+.tag-candidate{ background: rgba(34,197,94,0.2); color: #86efac; }
+.card-error { font-size: 10px; color: var(--red); margin-top: 6px; }
+
+/* ── Empty state ── */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-state h3 { font-size: 18px; margin-bottom: 8px; }
+
+/* ── Holdings Tab ── */
+#tab-holdings { display: none; }
+.holdings-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+.holdings-table th { text-align: left; padding: 8px 12px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--border); }
+.holdings-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.holdings-table tr:hover td { background: var(--surface2); }
+.holdings-table .total-row td { font-weight: 700; border-top: 2px solid var(--border); }
+.invest-input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 4px; padding: 3px 6px; width: 100px; text-align: right; }
+.sector-bar-wrap { margin-top: 16px; }
+.sector-bar-title { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.sector-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+.sector-bar-label { width: 130px; color: var(--muted); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; flex-shrink: 0; }
+.sector-bar-track { flex: 1; height: 12px; background: var(--surface2); border-radius: 6px; overflow: hidden; }
+.sector-bar-fill { height: 100%; border-radius: 6px; transition: width 0.3s; }
+.sector-bar-pct { width: 36px; text-align: right; flex-shrink: 0; }
+
+/* ── Modal ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  z-index: 1000; overflow-y: auto; padding: 20px;
+}
+.modal-overlay.open { display: flex; justify-content: center; align-items: flex-start; }
+.modal-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  width: 100%; max-width: 640px; padding: 24px; position: relative;
+}
+.modal-close { position: absolute; top: 16px; right: 16px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); border-radius: 50%; width: 28px; height: 28px; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { color: var(--text); }
+.modal-title { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+.modal-code { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+
+/* Modal sections */
+.modal-section { margin-bottom: 18px; }
+.modal-section-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+
+/* Tags */
+.modal-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.modal-tag-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 20px; padding: 5px 16px; font-size: 13px; transition: all 0.15s; }
+.modal-tag-btn.active-holding  { background: rgba(99,102,241,0.3); border-color: #6366f1; color: #a5b4fc; }
+.modal-tag-btn.active-watch    { background: rgba(234,179,8,0.25); border-color: #eab308; color: #fde047; }
+.modal-tag-btn.active-candidate{ background: rgba(34,197,94,0.25); border-color: #22c55e; color: #86efac; }
+
+/* Metrics grid */
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.metric-item { background: var(--surface2); border-radius: 8px; padding: 8px 12px; }
+.metric-item .m-label { font-size: 10px; color: var(--muted); }
+.metric-item .m-value { font-size: 16px; font-weight: 700; }
+.metric-item .m-value.positive { color: var(--red); }
+.metric-item .m-value.negative { color: var(--blue); }
+.metric-item .m-value.warn { color: var(--orange); }
+
+/* 52w bar */
+.w52-bar-wrap { margin: 4px 0 8px; }
+.w52-bar-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.w52-track { height: 8px; background: var(--surface2); border-radius: 4px; position: relative; }
+.w52-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--green), var(--red)); border-radius: 4px; position: absolute; top: 0; left: 0; }
+.w52-marker { width: 12px; height: 12px; background: #fff; border: 2px solid var(--accent); border-radius: 50%; position: absolute; top: -2px; transform: translateX(-50%); }
+.w52-current { font-size: 11px; color: var(--muted); text-align: center; margin-top: 4px; }
+
+/* Score radar */
+.score-area { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.score-badge { font-size: 40px; font-weight: 800; color: var(--accent); min-width: 70px; text-align: center; }
+.score-badge .score-label { font-size: 12px; color: var(--muted); font-weight: 400; }
+.radar-wrap { flex: 1; min-width: 180px; max-width: 220px; }
+.score-criteria { flex: 1; min-width: 160px; }
+.criterion { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 12px; }
+.criterion .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+.criterion .dot.on { background: var(--green); }
+
+/* Valuation */
+.val-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.val-item { background: var(--surface2); border-radius: 8px; padding: 8px 12px; }
+.val-item .v-label { font-size: 10px; color: var(--muted); }
+.val-item .v-value { font-size: 15px; font-weight: 700; }
+.val-item .v-eval { font-size: 10px; font-weight: 600; margin-top: 1px; }
+.v-cheap { color: var(--green); }
+.v-fair  { color: var(--muted); }
+.v-dear  { color: var(--red); }
+
+/* MA deviation */
+.ma-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.ma-row:last-child { border-bottom: none; }
+.ma-dev { font-weight: 700; }
+.ma-dev.over   { color: var(--red); }
+.ma-dev.under  { color: var(--green); }
+.ma-dev.neutral{ color: var(--muted); }
+
+/* Buy yield */
+.buy-yield-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.buy-yield-row input { width: 80px; }
+.buy-yield-cmp { font-size: 13px; }
+
+/* Manual form */
+.manual-toggle { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 5px 12px; font-size: 12px; margin-bottom: 10px; }
+.manual-form { display: none; }
+.manual-form.open { display: block; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.form-item label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+.form-item input { width: 100%; }
+.form-item.full { grid-column: 1 / -1; }
+.form-item textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-family: inherit; resize: vertical; }
+.btn-save { background: var(--accent); color: #fff; border-radius: 6px; padding: 6px 16px; font-size: 13px; margin-top: 4px; }
+.btn-clear { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 6px 16px; font-size: 13px; margin-top: 4px; margin-left: 6px; }
+.modal-link { display: inline-block; margin-top: 8px; font-size: 13px; }
+
+/* Utility */
+.hidden { display: none !important; }
+.text-muted { color: var(--muted); }
+.text-green { color: var(--green); }
+.text-red   { color: var(--red); }
+.text-orange{ color: var(--orange); }
+.text-blue  { color: var(--blue); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+@media (max-width: 600px) {
+  .metrics-grid { grid-template-columns: repeat(2,1fr); }
+  .form-grid { grid-template-columns: 1fr; }
+  .score-area { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header>
+    <h1>日本株 高配当トラッカー</h1>
+    <div class="header-meta" id="updated-label">データ未取得</div>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">利回り 4%以上</div>
+      <div class="stat-value red" id="stat-4pct">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">利回り 3.7%以上</div>
+      <div class="stat-value orange" id="stat-3p7pct">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">平均利回り</div>
+      <div class="stat-value" id="stat-avg-yield">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">銘柄数</div>
+      <div class="stat-value" id="stat-total">-</div>
+    </div>
+  </div>
+
+  <!-- Market Panel -->
+  <div class="market-panel">
+    <div class="market-block">
+      <div class="mb-label">VIX（恐怖指数）</div>
+      <div class="mb-value" id="vix-value">-</div>
+      <div class="mb-sub" id="vix-source">-</div>
+    </div>
+    <div class="market-block">
+      <div class="mb-label">騰落レシオ（手動入力）</div>
+      <input type="number" class="tdr-input" id="tdr-input" placeholder="例: 100" min="0" max="300" step="0.1">
+      <div class="mb-sub" id="tdr-hint">120超→過熱 / 70未満→売られすぎ</div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" data-filter="all">全銘柄</button>
+      <button class="tab-btn" data-filter="4pct">4%以上</button>
+      <button class="tab-btn" data-filter="3.7pct">3.7%以上</button>
+      <button class="tab-btn" data-filter="holding">💎保有銘柄</button>
+      <button class="tab-btn" data-filter="watch">🦁学長銘柄</button>
+      <button class="tab-btn" data-filter="candidate">候補</button>
+      <button class="tab-btn" data-filter="top30">トップ30</button>
+      <button class="tab-btn" data-filter="error">エラー</button>
+      <button class="tab-btn" data-filter="__holdings" style="margin-left:auto;">保有タブ</button>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">ソート:</span>
+      <select id="sort-select">
+        <option value="yield">利回り</option>
+        <option value="score">財務スコア</option>
+        <option value="code">コード</option>
+        <option value="price">株価</option>
+      </select>
+      <span class="filter-label">セクター:</span>
+      <select id="sector-select"><option value="">全セクター</option></select>
+      <span class="filter-label">最低スコア:</span>
+      <select id="score-select">
+        <option value="0">すべて</option>
+        <option value="2">2以上</option>
+        <option value="4">4以上</option>
+        <option value="6">6以上</option>
+        <option value="8">8点満点</option>
+      </select>
+      <input type="text" class="search-input" id="search-input" placeholder="銘柄名・コード検索">
+      <span class="result-info" id="result-info"></span>
+    </div>
+  </div>
+
+  <!-- Stocks Tab -->
+  <div id="tab-stocks">
+    <div id="cards-grid"></div>
+  </div>
+
+  <!-- Holdings Tab -->
+  <div id="tab-holdings">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
+      <h2 style="font-size:16px;margin-bottom:14px;">保有銘柄一覧</h2>
+      <div style="overflow-x:auto;">
+        <table class="holdings-table" id="holdings-table">
+          <thead>
+            <tr>
+              <th>コード</th>
+              <th>銘柄名</th>
+              <th>セクター</th>
+              <th>利回り</th>
+              <th>投資額（円）</th>
+              <th>割合</th>
+            </tr>
+          </thead>
+          <tbody id="holdings-body"></tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="4">合計</td>
+              <td id="holdings-total">-</td>
+              <td>100%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="sector-bar-wrap">
+        <div class="sector-bar-title">セクター配分（投資額ベース、未入力は件数）</div>
+        <div id="sector-bars"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .app -->
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" id="modal-box">
+    <button class="modal-close" id="modal-close">&times;</button>
+
+    <div class="modal-title" id="modal-title">-</div>
+    <div class="modal-code" id="modal-code">-</div>
+
+    <!-- Tags -->
+    <div class="modal-section">
+      <div class="modal-section-title">タグ</div>
+      <div class="modal-tags">
+        <button class="modal-tag-btn" id="tag-holding" onclick="toggleTag('holding')">💎保有銘柄</button>
+        <button class="modal-tag-btn" id="tag-watch"   onclick="toggleTag('watch')">🦁学長銘柄</button>
+        <button class="modal-tag-btn" id="tag-candidate" onclick="toggleTag('candidate')">候補</button>
+      </div>
+    </div>
+
+    <!-- Basic metrics -->
+    <div class="modal-section">
+      <div class="modal-section-title">基本情報</div>
+      <div class="metrics-grid" id="modal-metrics"></div>
+    </div>
+
+    <!-- 52-week position -->
+    <div class="modal-section">
+      <div class="modal-section-title">52週レンジ</div>
+      <div id="modal-w52"></div>
+    </div>
+
+    <!-- Financial Score -->
+    <div class="modal-section">
+      <div class="modal-section-title">財務スコア</div>
+      <div class="score-area">
+        <div class="score-badge">
+          <span id="score-num">-</span><span style="font-size:18px">/8</span>
+          <div class="score-label">財務スコア</div>
+        </div>
+        <div class="radar-wrap">
+          <canvas id="radar-chart" width="200" height="200"></canvas>
+        </div>
+        <div class="score-criteria" id="score-criteria"></div>
+      </div>
+    </div>
+
+    <!-- Valuation -->
+    <div class="modal-section">
+      <div class="modal-section-title">割安指標</div>
+      <div class="val-grid" id="modal-val"></div>
+    </div>
+
+    <!-- MA Deviation -->
+    <div class="modal-section">
+      <div class="modal-section-title">移動平均乖離率</div>
+      <div id="modal-ma"></div>
+    </div>
+
+    <!-- Buy Yield -->
+    <div class="modal-section">
+      <div class="modal-section-title">買い増し判断（購入時利回り比較）</div>
+      <div class="buy-yield-row">
+        <label style="font-size:12px;color:var(--muted);">購入時利回り%</label>
+        <input type="number" id="buy-yield-input" step="0.01" min="0" max="50" placeholder="例: 3.5">
+        <div class="buy-yield-cmp" id="buy-yield-cmp">-</div>
+      </div>
+    </div>
+
+    <!-- Manual override form -->
+    <div class="modal-section">
+      <div class="modal-section-title">手動データ上書き</div>
+      <button class="manual-toggle" id="manual-toggle" onclick="toggleManualForm()">▶ 編集フォームを開く</button>
+      <div class="manual-form" id="manual-form">
+        <div class="form-grid">
+          <div class="form-item">
+            <label>配当利回り (%)</label>
+            <input type="number" id="mf-yield" step="0.01" placeholder="例: 4.5">
+          </div>
+          <div class="form-item">
+            <label>PER</label>
+            <input type="number" id="mf-per" step="0.1" placeholder="例: 10.5">
+          </div>
+          <div class="form-item">
+            <label>PBR</label>
+            <input type="number" id="mf-pbr" step="0.01" placeholder="例: 0.8">
+          </div>
+          <div class="form-item">
+            <label>配当性向 (%)</label>
+            <input type="number" id="mf-payout" step="0.1" placeholder="例: 40">
+          </div>
+          <div class="form-item">
+            <label>ROE (%)</label>
+            <input type="number" id="mf-roe" step="0.1" placeholder="例: 12">
+          </div>
+          <div class="form-item">
+            <label>営業利益率 (%)</label>
+            <input type="number" id="mf-opm" step="0.1" placeholder="例: 8">
+          </div>
+          <div class="form-item">
+            <label>自己資本比率 (%)</label>
+            <input type="number" id="mf-eq" step="0.1" placeholder="例: 40">
+          </div>
+          <div class="form-item">
+            <label>購入時利回り (%)</label>
+            <input type="number" id="mf-buyyield" step="0.01" placeholder="例: 3.8">
+          </div>
+          <div class="form-item full">
+            <label>メモ</label>
+            <textarea id="mf-memo" rows="2" placeholder="メモを入力..."></textarea>
+          </div>
+        </div>
+        <button class="btn-save" onclick="saveManual()">保存</button>
+        <button class="btn-clear" onclick="clearManual()">クリア</button>
+      </div>
+    </div>
+
+    <a class="modal-link" id="yahoo-link" target="_blank" rel="noopener">Yahoo Finance で見る ↗</a>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+//  State
+// ════════════════════════════════════════════════
+let stocksData = null;
+let radarChart = null;
+let currentCode = null;
+
+const state = {
+  filter: 'all',
+  sort: 'yield',
+  sector: '',
+  minScore: 0,
+  search: '',
+  tab: 'stocks'
+};
+
+// ════════════════════════════════════════════════
+//  LocalStorage helpers
+// ════════════════════════════════════════════════
+const ls = {
+  get: k => localStorage.getItem(k),
+  set: (k, v) => localStorage.setItem(k, String(v)),
+  rm: k => localStorage.removeItem(k),
+  getJSON: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  setJSON: (k, v) => localStorage.setItem(k, JSON.stringify(v))
+};
+
+const TAG_KEYS = ['holding', 'watch', 'candidate'];
+
+function tagGet(code, tag) { return ls.get(`${tag}_${code}`) === '1'; }
+function tagSet(code, tag, val) { val ? ls.set(`${tag}_${code}`, '1') : ls.rm(`${tag}_${code}`); }
+function investGet(code) { return parseFloat(ls.get(`invest_${code}`)) || 0; }
+function investSet(code, val) { val ? ls.set(`invest_${code}`, val) : ls.rm(`invest_${code}`); }
+function buyYieldGet(code) { return parseFloat(ls.get(`buy_yield_${code}`)) || null; }
+function buyYieldSet(code, val) { val ? ls.set(`buy_yield_${code}`, val) : ls.rm(`buy_yield_${code}`); }
+function memoGet(code) { return ls.get(`memo_${code}`) || ''; }
+function manualGet(code) { return ls.getJSON(`manual_${code}`) || {}; }
+function manualSet(code, obj) { ls.setJSON(`manual_${code}`, obj); }
+function manualClear(code) { ls.rm(`manual_${code}`); }
+
+// 手動上書き or 実データを返す
+function eff(stock, field) {
+  const m = manualGet(stock.code);
+  const fieldMap = {
+    dividend_yield: m.yield,
+    per: m.per,
+    pbr: m.pbr,
+    payout_ratio: m.payout,
+    roe: m.roe,
+    operating_margin: m.opm,
+    equity_ratio: m.eq
+  };
+  const override = fieldMap[field];
+  if (override != null && override !== '') return parseFloat(override);
+  return stock[field];
+}
+
+// ════════════════════════════════════════════════
+//  Scoring
+// ════════════════════════════════════════════════
+function isDivIncreasing(stock) {
+  const h = stock.div_history;
+  if (!h || h.length < 4) return false;
+  const n = Math.floor(h.length / 2);
+  const toAmt = x => (typeof x === 'object' ? x.amount : x) || 0;
+  const recent = h.slice(-n).reduce((a, b) => a + toAmt(b), 0);
+  const older  = h.slice(-n * 2, -n).reduce((a, b) => a + toAmt(b), 0);
+  return older > 0 && recent >= older * 1.005;
+}
+
+function qualityScore(stock) {
+  let s = 0;
+  if (isDivIncreasing(stock)) s += 2;
+  const pr = eff(stock, 'payout_ratio');
+  if (pr != null && pr >= 20 && pr <= 60) s += 2;
+  const roe = eff(stock, 'roe');
+  if (roe != null && roe >= 8) s += 2;
+  const ocf = stock.operating_cf;
+  if (ocf != null && ocf > 0) s += 2;
+  return s;
+}
+
+function top30Score(stock) {
+  const dy = eff(stock, 'dividend_yield');
+  if (!dy || dy >= 20 || stock.error) return -1;
+  const ys  = Math.min(dy / 5 * 40, 40);
+  const qs  = qualityScore(stock);
+  const fs  = qs / 8 * 35;
+  const pbr = eff(stock, 'pbr');
+  const pbrS = pbr == null ? 0 : pbr < 0.5 ? 15 : pbr < 0.8 ? 12 : pbr < 1.0 ? 9 : pbr < 1.5 ? 5 : 0;
+  const per = eff(stock, 'per');
+  const perS = per == null ? 0 : per < 10 ? 10 : per < 15 ? 7 : per < 20 ? 4 : 0;
+  return Math.round(ys + fs + pbrS + perS);
+}
+
+// ════════════════════════════════════════════════
+//  Card border class
+// ════════════════════════════════════════════════
+function borderClass(stock) {
+  const dy = eff(stock, 'dividend_yield');
+  if (dy != null && dy < 20) {
+    if (dy >= 4)   return 'border-red';
+    if (dy >= 3.7) return 'border-orange';
+  }
+  if (stock.price && stock.week52_high && stock.week52_low) {
+    const range = stock.week52_high - stock.week52_low;
+    if (range > 0) {
+      const threshold = stock.week52_low + range * 0.33;
+      if (stock.price <= threshold) return 'border-blue';
+    }
+  }
+  return '';
+}
+
+// ════════════════════════════════════════════════
+//  Filtering & Sorting
+// ════════════════════════════════════════════════
+function getFiltered() {
+  if (!stocksData || !stocksData.stocks) return [];
+  let arr = [...stocksData.stocks];
+
+  switch (state.filter) {
+    case '4pct':      arr = arr.filter(s => !s.error && eff(s,'dividend_yield') >= 4   && eff(s,'dividend_yield') < 20); break;
+    case '3.7pct':    arr = arr.filter(s => !s.error && eff(s,'dividend_yield') >= 3.7 && eff(s,'dividend_yield') < 20); break;
+    case 'holding':   arr = arr.filter(s => tagGet(s.code,'holding')); break;
+    case 'watch':     arr = arr.filter(s => tagGet(s.code,'watch')); break;
+    case 'candidate': arr = arr.filter(s => tagGet(s.code,'candidate')); break;
+    case 'top30':
+      arr = arr.filter(s => !s.error && eff(s,'dividend_yield') < 20);
+      arr.sort((a,b) => top30Score(b) - top30Score(a));
+      arr = arr.slice(0, 30);
+      return arr; // already sorted
+    case 'error': arr = arr.filter(s => s.error); break;
+  }
+
+  if (state.sector) arr = arr.filter(s => s.sector === state.sector);
+  if (state.minScore > 0) arr = arr.filter(s => qualityScore(s) >= state.minScore);
+  if (state.search) {
+    const q = state.search.toLowerCase();
+    arr = arr.filter(s =>
+      s.code.toLowerCase().includes(q) ||
+      s.name.toLowerCase().includes(q) ||
+      (s.sector||'').toLowerCase().includes(q)
+    );
+  }
+  return arr;
+}
+
+function getSorted(arr) {
+  if (state.filter === 'top30') return arr;
+  const a = [...arr];
+  switch (state.sort) {
+    case 'yield': a.sort((x,y) => (eff(y,'dividend_yield')||0) - (eff(x,'dividend_yield')||0)); break;
+    case 'score': a.sort((x,y) => top30Score(y) - top30Score(x)); break;
+    case 'code':  a.sort((x,y) => x.code.localeCompare(y.code)); break;
+    case 'price': a.sort((x,y) => (y.price||0) - (x.price||0)); break;
+  }
+  return a;
+}
+
+// ════════════════════════════════════════════════
+//  Formatters
+// ════════════════════════════════════════════════
+function fmtNum(n, decimals=0) {
+  if (n == null) return '-';
+  return n.toLocaleString('ja-JP', {maximumFractionDigits: decimals, minimumFractionDigits: decimals});
+}
+function fmtPct(n, d=2) {
+  if (n == null) return '-';
+  return n.toFixed(d) + '%';
+}
+function fmtCap(n) {
+  if (n == null) return '-';
+  if (n >= 1e12) return (n/1e12).toFixed(1) + '兆円';
+  if (n >= 1e8)  return (n/1e8).toFixed(0) + '億円';
+  return n.toLocaleString() + '円';
+}
+function fmtChange(n) {
+  if (n == null) return {text:'-', cls:''};
+  const sign = n > 0 ? '+' : '';
+  return {text: sign + n.toFixed(2)+'%', cls: n > 0 ? 'pos' : n < 0 ? 'neg' : ''};
+}
+
+// ════════════════════════════════════════════════
+//  Render Stats Bar
+// ════════════════════════════════════════════════
+function renderStats() {
+  if (!stocksData) return;
+  const valid = stocksData.stocks.filter(s => !s.error && eff(s,'dividend_yield') < 20);
+  const cnt4   = valid.filter(s => eff(s,'dividend_yield') >= 4).length;
+  const cnt37  = valid.filter(s => eff(s,'dividend_yield') >= 3.7).length;
+  const yields = valid.map(s => eff(s,'dividend_yield')).filter(v => v != null);
+  const avgY   = yields.length ? (yields.reduce((a,b)=>a+b,0)/yields.length).toFixed(2) + '%' : '-';
+
+  document.getElementById('stat-4pct').textContent   = cnt4;
+  document.getElementById('stat-3p7pct').textContent = cnt37;
+  document.getElementById('stat-avg-yield').textContent = avgY;
+  document.getElementById('stat-total').textContent  = stocksData.stocks.length;
+
+  if (stocksData.updated) {
+    const d = new Date(stocksData.updated);
+    document.getElementById('updated-label').textContent =
+      `更新: ${d.toLocaleDateString('ja-JP')} ${d.toLocaleTimeString('ja-JP', {hour:'2-digit',minute:'2-digit'})}`;
+  }
+}
+
+// ════════════════════════════════════════════════
+//  Render Market Panel
+// ════════════════════════════════════════════════
+function vixClass(v) {
+  if (v == null) return '';
+  return v < 20 ? 'vix-green' : v <= 30 ? 'vix-orange' : 'vix-red';
+}
+function updateVixDisplay(val, isLive) {
+  const el = document.getElementById('vix-value');
+  const src = document.getElementById('vix-source');
+  el.className = 'mb-value ' + vixClass(val);
+  el.textContent = val != null ? val.toFixed(2) : '-';
+  src.textContent = isLive ? 'ライブ更新' : (stocksData?.vix_updated ? 'JSON: ' + stocksData.vix_updated.slice(0,16).replace('T',' ') : '-');
+}
+async function updateVixLive() {
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), 6000);
+  try {
+    const url = 'https://query2.finance.yahoo.com/v8/finance/chart/%5EVIX?range=1d&interval=5m';
+    const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, {signal: ctrl.signal});
+    const data = await res.json();
+    clearTimeout(tid);
+    const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if (price) { updateVixDisplay(price, true); return; }
+  } catch (e) { /* fallback */ }
+  clearTimeout(tid);
+  if (stocksData?.vix) updateVixDisplay(stocksData.vix, false);
+  else updateVixDisplay(null, false);
+}
+
+function initTdr() {
+  const inp = document.getElementById('tdr-input');
+  const saved = ls.get('tdr_value');
+  if (saved) inp.value = saved;
+  function updateColor() {
+    const v = parseFloat(inp.value);
+    inp.className = 'tdr-input ' + (isNaN(v)?'' : v>120?'tdr-red' : v<70?'tdr-blue':'tdr-green');
+  }
+  inp.addEventListener('input', () => { ls.set('tdr_value', inp.value); updateColor(); });
+  updateColor();
+}
+
+// ════════════════════════════════════════════════
+//  Populate Sector Filter
+// ════════════════════════════════════════════════
+function populateSectorFilter() {
+  if (!stocksData) return;
+  const sectors = [...new Set(stocksData.stocks.map(s=>s.sector).filter(Boolean))].sort();
+  const sel = document.getElementById('sector-select');
+  sel.innerHTML = '<option value="">全セクター</option>' +
+    sectors.map(s=>`<option value="${s}">${s}</option>`).join('');
+}
+
+// ════════════════════════════════════════════════
+//  Render Tab Counts
+// ════════════════════════════════════════════════
+function renderTabCounts() {
+  if (!stocksData) return;
+  const all = stocksData.stocks;
+  const valid = all.filter(s => !s.error && eff(s,'dividend_yield') < 20);
+  const counts = {
+    all: all.length,
+    '4pct': valid.filter(s => eff(s,'dividend_yield') >= 4).length,
+    '3.7pct': valid.filter(s => eff(s,'dividend_yield') >= 3.7).length,
+    holding: all.filter(s => tagGet(s.code,'holding')).length,
+    watch: all.filter(s => tagGet(s.code,'watch')).length,
+    candidate: all.filter(s => tagGet(s.code,'candidate')).length,
+    top30: Math.min(30, valid.length),
+    error: all.filter(s => s.error).length
+  };
+  document.querySelectorAll('.tab-btn[data-filter]').forEach(btn => {
+    const f = btn.dataset.filter;
+    const n = counts[f];
+    const existing = btn.querySelector('.tab-count');
+    if (existing) existing.remove();
+    if (n != null) btn.insertAdjacentHTML('beforeend', `<span class="tab-count">(${n})</span>`);
+  });
+}
+
+// ════════════════════════════════════════════════
+//  Render Cards
+// ════════════════════════════════════════════════
+function renderCards() {
+  const grid = document.getElementById('cards-grid');
+  if (!stocksData || !stocksData.stocks.length) {
+    grid.innerHTML = '<div class="empty-state"><h3>データなし</h3><p>scripts/fetch_stocks.py を実行してください。</p></div>';
+    document.getElementById('result-info').textContent = '';
+    return;
+  }
+
+  const filtered = getFiltered();
+  const sorted   = getSorted(filtered);
+
+  const yields = sorted.filter(s=>!s.error && eff(s,'dividend_yield')<20).map(s=>eff(s,'dividend_yield')).filter(v=>v!=null);
+  const avgY   = yields.length ? (yields.reduce((a,b)=>a+b,0)/yields.length).toFixed(2)+'%' : '-';
+  document.getElementById('result-info').textContent = `${sorted.length}件 / 平均利回り ${avgY}`;
+
+  if (!sorted.length) {
+    grid.innerHTML = '<div class="empty-state"><h3>該当なし</h3><p>フィルター条件を変えてみてください。</p></div>';
+    return;
+  }
+
+  grid.innerHTML = sorted.map(s => cardHTML(s)).join('');
+}
+
+function cardHTML(s) {
+  const dy = eff(s, 'dividend_yield');
+  const isAnomaly = dy != null && dy >= 20;
+  const dyDisp = s.error ? '-' : isAnomaly ? '-' : dy != null ? fmtPct(dy) : '-';
+  const yieldCls = isAnomaly ? 'anomaly' : dy >= 4 ? 'high' : dy >= 3.7 ? 'mid' : '';
+  const chg = fmtChange(s.day_change);
+  const bc  = borderClass(s);
+  const tags = TAG_KEYS.filter(t => tagGet(s.code, t));
+  const sc = top30Score(s);
+  const qs = qualityScore(s);
+
+  return `<div class="card ${bc}" onclick="openModal('${s.code}')">
+    <div class="card-header">
+      <div>
+        <div class="card-code">${s.code}${s.sector ? ' · '+s.sector : ''}</div>
+        <div class="card-name">${s.name}</div>
+      </div>
+      <div class="card-yield ${yieldCls}">${dyDisp}</div>
+    </div>
+    <div class="card-price">
+      ¥${s.price != null ? fmtNum(s.price) : '-'}
+      <span class="card-change ${chg.cls}">${chg.text}</span>
+    </div>
+    <div class="card-footer">
+      <div class="card-score">スコア ${sc >= 0 ? sc : '-'} / 財務 ${qs}/8</div>
+      <div class="card-tags">${tags.map(t=>`<span class="tag-badge tag-${t}">${t==='holding'?'保有':t==='watch'?'WL':'候補'}</span>`).join('')}</div>
+    </div>
+    ${s.error ? `<div class="card-error">⚠ ${s.error.slice(0,60)}</div>` : ''}
+  </div>`;
+}
+
+// ════════════════════════════════════════════════
+//  Modal
+// ════════════════════════════════════════════════
+function openModal(code) {
+  if (!stocksData) return;
+  const stock = stocksData.stocks.find(s => s.code === code);
+  if (!stock) return;
+  currentCode = code;
+  renderModal(stock);
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentCode = null;
+}
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+function renderModal(stock) {
+  const code = stock.code;
+  document.getElementById('modal-title').textContent = stock.name;
+  document.getElementById('modal-code').textContent  = code + (stock.sector ? ' · ' + stock.sector : '');
+  document.getElementById('yahoo-link').href = `https://finance.yahoo.co.jp/quote/${code}`;
+
+  // Tags
+  TAG_KEYS.forEach(t => {
+    const btn = document.getElementById(`tag-${t}`);
+    btn.className = `modal-tag-btn${tagGet(code,t) ? ` active-${t}` : ''}`;
+  });
+
+  // Metrics
+  const dy = eff(stock,'dividend_yield');
+  const isAnomaly = dy != null && dy >= 20;
+  const chg = fmtChange(stock.day_change);
+  document.getElementById('modal-metrics').innerHTML = `
+    <div class="metric-item">
+      <div class="m-label">株価</div>
+      <div class="m-value">¥${stock.price != null ? fmtNum(stock.price) : '-'}</div>
+    </div>
+    <div class="metric-item">
+      <div class="m-label">前日比</div>
+      <div class="m-value ${stock.day_change>0?'positive':stock.day_change<0?'negative':''}">${chg.text}</div>
+    </div>
+    <div class="metric-item">
+      <div class="m-label">配当利回り</div>
+      <div class="m-value ${!isAnomaly&&dy>=4?'positive':!isAnomaly&&dy>=3.7?'warn':''}">${isAnomaly?'-（異常値）':dy!=null?fmtPct(dy):'-'}</div>
+    </div>
+    <div class="metric-item">
+      <div class="m-label">年間配当</div>
+      <div class="m-value">¥${stock.annual_dividend != null ? fmtNum(stock.annual_dividend) : '-'}</div>
+    </div>
+    <div class="metric-item">
+      <div class="m-label">時価総額</div>
+      <div class="m-value" style="font-size:13px">${fmtCap(stock.market_cap)}</div>
+    </div>
+    <div class="metric-item">
+      <div class="m-label">営業利益率</div>
+      <div class="m-value">${eff(stock,'operating_margin')!=null?fmtPct(eff(stock,'operating_margin')):'-'}</div>
+    </div>
+    <div class="metric-item">
+      <div class="m-label">ROE</div>
+      <div class="m-value">${eff(stock,'roe')!=null?fmtPct(eff(stock,'roe')):'-'}</div>
+    </div>
+    <div class="metric-item">
+      <div class="m-label">自己資本比率</div>
+      <div class="m-value">${eff(stock,'equity_ratio')!=null?fmtPct(eff(stock,'equity_ratio')):'-'}</div>
+    </div>
+    <div class="metric-item">
+      <div class="m-label">配当性向</div>
+      <div class="m-value">${eff(stock,'payout_ratio')!=null?fmtPct(eff(stock,'payout_ratio')):'-'}</div>
+    </div>
+  `;
+
+  // 52-week bar
+  render52w(stock);
+
+  // Quality score + radar
+  renderScore(stock);
+
+  // Valuation
+  renderVal(stock);
+
+  // MA
+  renderMA(stock);
+
+  // Buy yield
+  const by = buyYieldGet(code);
+  const byInput = document.getElementById('buy-yield-input');
+  byInput.value = by || '';
+  updateBuyYield(stock);
+
+  // Manual form
+  const m = manualGet(code);
+  document.getElementById('mf-yield').value    = m.yield || '';
+  document.getElementById('mf-per').value      = m.per || '';
+  document.getElementById('mf-pbr').value      = m.pbr || '';
+  document.getElementById('mf-payout').value   = m.payout || '';
+  document.getElementById('mf-roe').value      = m.roe || '';
+  document.getElementById('mf-opm').value      = m.opm || '';
+  document.getElementById('mf-eq').value       = m.eq || '';
+  document.getElementById('mf-buyyield').value = m.buyyield || '';
+  document.getElementById('mf-memo').value     = memoGet(code);
+  document.getElementById('manual-form').classList.remove('open');
+  document.getElementById('manual-toggle').textContent = '▶ 編集フォームを開く';
+}
+
+function render52w(stock) {
+  const { price, week52_high, week52_low } = stock;
+  const container = document.getElementById('modal-w52');
+  if (!price || !week52_high || !week52_low || week52_high <= week52_low) {
+    container.innerHTML = '<span class="text-muted">データなし</span>'; return;
+  }
+  const range = week52_high - week52_low;
+  const pos = Math.min(Math.max((price - week52_low) / range * 100, 0), 100);
+  container.innerHTML = `
+    <div class="w52-bar-wrap">
+      <div class="w52-bar-labels">
+        <span>安値 ¥${fmtNum(week52_low)}</span>
+        <span>高値 ¥${fmtNum(week52_high)}</span>
+      </div>
+      <div class="w52-track">
+        <div class="w52-fill" style="width:100%"></div>
+        <div class="w52-marker" style="left:${pos}%"></div>
+      </div>
+      <div class="w52-current">現在値 ¥${fmtNum(price)}（レンジ内 ${pos.toFixed(0)}%）</div>
+    </div>`;
+}
+
+function renderScore(stock) {
+  const qs = qualityScore(stock);
+  document.getElementById('score-num').textContent = qs;
+
+  const pr = eff(stock,'payout_ratio');
+  const roe = eff(stock,'roe');
+  const ocf = stock.operating_cf;
+  const divInc = isDivIncreasing(stock);
+  const criteria = [
+    { label:'増配トレンド',  on: divInc },
+    { label:'配当性向20〜60%', on: pr!=null && pr>=20 && pr<=60 },
+    { label:'ROE 8%以上',   on: roe!=null && roe>=8 },
+    { label:'営業CFプラス',  on: ocf!=null && ocf>0 },
+  ];
+
+  document.getElementById('score-criteria').innerHTML = criteria.map(c =>
+    `<div class="criterion"><div class="dot ${c.on?'on':''}"></div>${c.label}: <b style="margin-left:4px;color:${c.on?'var(--green)':'var(--muted)'}">${c.on?'+2':'0'}</b></div>`
+  ).join('');
+
+  // Radar chart
+  if (radarChart) { radarChart.destroy(); radarChart = null; }
+  const ctx = document.getElementById('radar-chart').getContext('2d');
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['増配', '配当性向', 'ROE', '営業CF'],
+      datasets: [{
+        data: [
+          divInc ? 2 : 0,
+          pr!=null && pr>=20 && pr<=60 ? 2 : 0,
+          roe!=null && roe>=8 ? 2 : 0,
+          ocf!=null && ocf>0  ? 2 : 0
+        ],
+        backgroundColor: 'rgba(99,102,241,0.25)',
+        borderColor: 'rgba(99,102,241,0.8)',
+        pointBackgroundColor: 'rgba(99,102,241,1)',
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      scales: {
+        r: {
+          min: 0, max: 2, ticks: { stepSize: 1, display: false },
+          grid: { color: 'rgba(255,255,255,0.1)' },
+          angleLines: { color: 'rgba(255,255,255,0.1)' },
+          pointLabels: { color: '#94a3b8', font: { size: 10 } }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+function renderVal(stock) {
+  const per = eff(stock,'per');
+  const pbr = eff(stock,'pbr');
+
+  function perEval(v) {
+    if (v == null) return { text:'-', cls:'v-fair' };
+    return v < 10 ? { text:'割安', cls:'v-cheap' }
+         : v < 15 ? { text:'やや割安', cls:'v-cheap' }
+         : v < 20 ? { text:'適正', cls:'v-fair' }
+         : { text:'割高', cls:'v-dear' };
+  }
+  function pbrEval(v) {
+    if (v == null) return { text:'-', cls:'v-fair' };
+    return v < 0.8 ? { text:'割安', cls:'v-cheap' }
+         : v < 1.0 ? { text:'やや割安', cls:'v-cheap' }
+         : v < 1.5 ? { text:'適正', cls:'v-fair' }
+         : { text:'割高', cls:'v-dear' };
+  }
+
+  const pe = perEval(per), pb = pbrEval(pbr);
+  document.getElementById('modal-val').innerHTML = `
+    <div class="val-item">
+      <div class="v-label">PER</div>
+      <div class="v-value">${per!=null?per.toFixed(1)+'倍':'-'}</div>
+      <div class="v-eval ${pe.cls}">${pe.text}</div>
+    </div>
+    <div class="val-item">
+      <div class="v-label">PBR</div>
+      <div class="v-value">${pbr!=null?pbr.toFixed(2)+'倍':'-'}</div>
+      <div class="v-eval ${pb.cls}">${pb.text}</div>
+    </div>`;
+}
+
+function renderMA(stock) {
+  const { price, ma25, ma75 } = stock;
+  const container = document.getElementById('modal-ma');
+  if (!price) { container.innerHTML = '<span class="text-muted">データなし</span>'; return; }
+
+  function maRow(label, ma) {
+    if (!ma) return `<div class="ma-row"><span>${label}</span><span class="text-muted">データなし</span></div>`;
+    const dev = (price - ma) / ma * 100;
+    const cls = dev > 5 ? 'over' : dev < -5 ? 'under' : 'neutral';
+    return `<div class="ma-row">
+      <span>${label} ¥${fmtNum(ma)}</span>
+      <span class="ma-dev ${cls}">${dev>=0?'+':''}${dev.toFixed(2)}%</span>
+    </div>`;
+  }
+  container.innerHTML = maRow('25日MA', ma25) + maRow('75日MA', ma75);
+}
+
+function updateBuyYield(stock) {
+  const by = parseFloat(document.getElementById('buy-yield-input').value);
+  const dy = eff(stock, 'dividend_yield');
+  const el = document.getElementById('buy-yield-cmp');
+  if (isNaN(by) || by <= 0 || !dy || dy >= 20) {
+    el.textContent = '購入時利回りを入力してください';
+    el.className = 'buy-yield-cmp text-muted';
+    return;
+  }
+  const diff = dy - by;
+  if (diff >= 0.3) {
+    el.textContent = `現在 ${fmtPct(dy)} → 購入時より +${diff.toFixed(2)}pt ✓ 買い増し有利`;
+    el.className = 'buy-yield-cmp text-green';
+  } else if (diff <= -0.3) {
+    el.textContent = `現在 ${fmtPct(dy)} → 購入時より ${diff.toFixed(2)}pt ✗ 買い増し不利`;
+    el.className = 'buy-yield-cmp text-red';
+  } else {
+    el.textContent = `現在 ${fmtPct(dy)} → 購入時と同水準 (${diff>=0?'+':''}${diff.toFixed(2)}pt)`;
+    el.className = 'buy-yield-cmp text-muted';
+  }
+}
+
+document.getElementById('buy-yield-input').addEventListener('input', () => {
+  if (!currentCode || !stocksData) return;
+  const stock = stocksData.stocks.find(s => s.code === currentCode);
+  const val = document.getElementById('buy-yield-input').value;
+  buyYieldSet(currentCode, val);
+  if (stock) updateBuyYield(stock);
+});
+
+// ════════════════════════════════════════════════
+//  Tag toggle
+// ════════════════════════════════════════════════
+function toggleTag(tag) {
+  if (!currentCode) return;
+  const val = !tagGet(currentCode, tag);
+  tagSet(currentCode, tag, val);
+  const btn = document.getElementById(`tag-${tag}`);
+  btn.className = `modal-tag-btn${val ? ` active-${tag}` : ''}`;
+  renderCards();
+  renderTabCounts();
+  if (state.filter === '__holdings') renderHoldings();
+}
+
+// ════════════════════════════════════════════════
+//  Manual form
+// ════════════════════════════════════════════════
+function toggleManualForm() {
+  const form = document.getElementById('manual-form');
+  const btn  = document.getElementById('manual-toggle');
+  const open = form.classList.toggle('open');
+  btn.textContent = open ? '▼ 編集フォームを閉じる' : '▶ 編集フォームを開く';
+}
+
+function saveManual() {
+  if (!currentCode) return;
+  const stock = stocksData?.stocks.find(s => s.code === currentCode);
+  const obj = {
+    yield:    document.getElementById('mf-yield').value    || undefined,
+    per:      document.getElementById('mf-per').value      || undefined,
+    pbr:      document.getElementById('mf-pbr').value      || undefined,
+    payout:   document.getElementById('mf-payout').value   || undefined,
+    roe:      document.getElementById('mf-roe').value      || undefined,
+    opm:      document.getElementById('mf-opm').value      || undefined,
+    eq:       document.getElementById('mf-eq').value       || undefined,
+    buyyield: document.getElementById('mf-buyyield').value || undefined,
+  };
+  // Remove undefined keys
+  Object.keys(obj).forEach(k => obj[k] === undefined && delete obj[k]);
+  manualSet(currentCode, obj);
+
+  const memo = document.getElementById('mf-memo').value;
+  memo ? ls.set(`memo_${currentCode}`, memo) : ls.rm(`memo_${currentCode}`);
+
+  const by = document.getElementById('mf-buyyield').value;
+  buyYieldSet(currentCode, by);
+  if (by) document.getElementById('buy-yield-input').value = by;
+
+  if (stock) { updateBuyYield(stock); renderVal(stock); renderScore(stock); }
+  renderCards();
+  alert('保存しました');
+}
+
+function clearManual() {
+  if (!currentCode) return;
+  if (!confirm('手動データをクリアしますか？')) return;
+  manualClear(currentCode);
+  ls.rm(`memo_${currentCode}`);
+  ls.rm(`buy_yield_${currentCode}`);
+  const stock = stocksData?.stocks.find(s => s.code === currentCode);
+  if (stock) renderModal(stock);
+  renderCards();
+}
+
+// ════════════════════════════════════════════════
+//  Holdings Tab
+// ════════════════════════════════════════════════
+function renderHoldings() {
+  if (!stocksData) return;
+  const holdings = stocksData.stocks.filter(s => tagGet(s.code,'holding'));
+  const tbody = document.getElementById('holdings-body');
+
+  // Calculate total
+  let total = 0;
+  const rows = holdings.map(s => {
+    const amt = investGet(s.code);
+    total += amt;
+    return { stock: s, amt };
+  });
+
+  tbody.innerHTML = rows.map(({ stock: s, amt }) => {
+    const dy = eff(s,'dividend_yield');
+    return `<tr>
+      <td>${s.code}</td>
+      <td>${s.name}</td>
+      <td>${s.sector||'-'}</td>
+      <td>${dy!=null && dy<20 ? fmtPct(dy) : '-'}</td>
+      <td><input type="number" class="invest-input" placeholder="0" value="${amt||''}"
+        onchange="investSet('${s.code}',this.value);renderHoldings();" min="0" step="10000"></td>
+      <td id="pct-${s.code}">-</td>
+    </tr>`;
+  }).join('');
+
+  // Fill percentages
+  rows.forEach(({ stock: s, amt }) => {
+    const el = document.getElementById(`pct-${s.code}`);
+    if (el) el.textContent = total > 0 && amt > 0 ? (amt/total*100).toFixed(1)+'%' : '-';
+  });
+
+  document.getElementById('holdings-total').textContent =
+    total > 0 ? '¥' + total.toLocaleString('ja-JP') : '-';
+
+  // Sector bars
+  renderSectorBars(holdings, total, rows);
+}
+
+const SECTOR_COLORS = [
+  '#6366f1','#22c55e','#f97316','#3b82f6','#eab308',
+  '#ec4899','#14b8a6','#8b5cf6','#f43f5e','#06b6d4','#84cc16'
+];
+
+function renderSectorBars(holdings, total, rows) {
+  const sectorData = {};
+  rows.forEach(({ stock: s, amt }) => {
+    const sec = s.sector || 'その他';
+    if (!sectorData[sec]) sectorData[sec] = { amt: 0, count: 0 };
+    sectorData[sec].amt += amt;
+    sectorData[sec].count += 1;
+  });
+
+  const useAmt = total > 0;
+  const entries = Object.entries(sectorData);
+  const totalVal = useAmt
+    ? entries.reduce((a,[,v])=>a+v.amt,0)
+    : entries.reduce((a,[,v])=>a+v.count,0);
+
+  const sorted = entries.sort((a,b) => (useAmt?b[1].amt:b[1].count) - (useAmt?a[1].amt:a[1].count));
+
+  document.getElementById('sector-bars').innerHTML = sorted.map(([sec,v], i) => {
+    const val = useAmt ? v.amt : v.count;
+    const pct = totalVal > 0 ? (val/totalVal*100) : 0;
+    const color = SECTOR_COLORS[i % SECTOR_COLORS.length];
+    return `<div class="sector-bar-row">
+      <div class="sector-bar-label" title="${sec}">${sec}</div>
+      <div class="sector-bar-track">
+        <div class="sector-bar-fill" style="width:${pct.toFixed(1)}%;background:${color}"></div>
+      </div>
+      <div class="sector-bar-pct">${pct.toFixed(0)}%</div>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════
+//  Tab switching
+// ════════════════════════════════════════════════
+function switchTab(filter) {
+  const isHoldings = filter === '__holdings';
+  document.getElementById('tab-stocks').style.display   = isHoldings ? 'none' : '';
+  document.getElementById('tab-holdings').style.display = isHoldings ? '' : 'none';
+
+  if (isHoldings) {
+    renderHoldings();
+  } else {
+    state.filter = filter;
+    renderCards();
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === filter);
+  });
+}
+
+// ════════════════════════════════════════════════
+//  Event listeners
+// ════════════════════════════════════════════════
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  switchTab(btn.dataset.filter);
+});
+document.getElementById('sort-select').addEventListener('change', e => {
+  state.sort = e.target.value; renderCards();
+});
+document.getElementById('sector-select').addEventListener('change', e => {
+  state.sector = e.target.value; renderCards();
+});
+document.getElementById('score-select').addEventListener('change', e => {
+  state.minScore = parseInt(e.target.value); renderCards();
+});
+document.getElementById('search-input').addEventListener('input', e => {
+  state.search = e.target.value; renderCards();
+});
+
+// ════════════════════════════════════════════════
+//  Load Data
+// ════════════════════════════════════════════════
+async function loadData() {
+  try {
+    const res = await fetch('data/stocks.json?t=' + Date.now());
+    stocksData = await res.json();
+  } catch (e) {
+    document.getElementById('cards-grid').innerHTML =
+      '<div class="empty-state"><h3>stocks.json を読み込めません</h3><p>scripts/fetch_stocks.py を実行してください。</p></div>';
+    return;
+  }
+
+  renderStats();
+  populateSectorFilter();
+  renderTabCounts();
+  renderCards();
+  initTdr();
+
+  // VIX
+  if (stocksData.vix) updateVixDisplay(stocksData.vix, false);
+  updateVixLive();
+}
+
+document.addEventListener('DOMContentLoaded', loadData);
+</script>
+</body>
+</html>
