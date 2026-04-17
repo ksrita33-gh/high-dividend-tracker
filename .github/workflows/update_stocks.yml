@@ -5,7 +5,7 @@ on:
     - cron: '35 2 * * 1-5'   # JST 11:35 (UTC 02:35) 平日
     - cron: '35 6 * * 1-5'   # JST 15:35 (UTC 06:35) 平日
     - cron: '0 9 * * 1-5'    # JST 18:00 (UTC 09:00) 平日
-  workflow_dispatch:          # 手動実行
+  workflow_dispatch: {}       # 手動実行
 
 permissions:
   contents: write
