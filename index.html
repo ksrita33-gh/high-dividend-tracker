@@ -309,7 +309,7 @@ select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1p
     <!-- Add Stock Panel -->
     <div class="add-stock-panel hidden" id="add-stock-panel">
       <div class="add-stock-input-wrap">
-        <input type="text" class="add-stock-input" id="add-stock-input" placeholder="銘柄コード or 銘柄名で検索" oninput="onAddInput()" onkeydown="onAddKey(event)" autocomplete="off">
+        <input type="text" class="add-stock-input" id="add-stock-input" placeholder="銘柄コード or 銘柄名で検索" oninput="onAddInput()" onkeyup="onAddInput()" onkeydown="onAddKey(event)" autocomplete="off">
         <div class="add-suggestions hidden" id="add-suggestions"></div>
       </div>
       <div class="add-tag-select" id="add-tag-select">
@@ -1126,13 +1126,19 @@ function onAddInput() {
   const box = document.getElementById('add-suggestions');
   addSelectedCode = null;
   if (!q || !stocksData) { box.classList.add('hidden'); return; }
-  const matches = stocksData.stocks.filter(s =>
-    s.code.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)
-  ).slice(0, 10);
+  const matches = stocksData.stocks.filter(s => {
+    const name = (s.name || '').toLowerCase();
+    return s.code.toLowerCase().includes(q) || name.includes(q);
+  }).slice(0, 10);
   if (!matches.length) { box.classList.add('hidden'); return; }
-  box.innerHTML = matches.map(s =>
-    `<div class="add-suggestion-item" onclick="selectAddStock('${s.code}','${s.name}')">${s.code} ${s.name}</div>`
-  ).join('');
+  box.innerHTML = '';
+  matches.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'add-suggestion-item';
+    div.textContent = `${s.code} ${s.name || ''}`;
+    div.addEventListener('click', () => selectAddStock(s.code, s.name || s.code));
+    box.appendChild(div);
+  });
   box.classList.remove('hidden');
 }
 
