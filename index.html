@@ -215,6 +215,20 @@ select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1p
 .btn-clear { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 6px 16px; font-size: 13px; margin-top: 4px; margin-left: 6px; }
 .modal-link { display: inline-block; margin-top: 8px; font-size: 13px; }
 
+/* ── Add Stock ── */
+.add-stock-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 8px; }
+.add-stock-input-wrap { position: relative; flex: 1 1 220px; }
+.add-stock-input { width: 100%; }
+.add-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; max-height: 200px; overflow-y: auto; z-index: 200; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.add-suggestion-item { padding: 7px 12px; cursor: pointer; font-size: 13px; }
+.add-suggestion-item:hover { background: var(--border); }
+.add-tag-select { display: flex; gap: 6px; flex-wrap: wrap; }
+.add-tag-opt { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 13px; }
+.add-tag-opt.sel-holding  { background: rgba(99,102,241,0.3);  border-color: #6366f1; color: #a5b4fc; }
+.add-tag-opt.sel-watch    { background: rgba(234,179,8,0.25);  border-color: #eab308; color: #fde047; }
+.add-tag-opt.sel-candidate{ background: rgba(34,197,94,0.25);  border-color: #22c55e; color: #86efac; }
+.add-stock-submit { background: var(--accent); color: #fff; border-radius: 8px; padding: 6px 18px; font-size: 13px; }
+
 /* Utility */
 .hidden { display: none !important; }
 .text-muted { color: var(--muted); }
@@ -290,6 +304,20 @@ select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1p
       <button class="tab-btn" data-filter="top30">トップ30</button>
       <button class="tab-btn" data-filter="error">エラー</button>
       <button class="tab-btn" data-filter="__holdings" style="margin-left:auto;">保有タブ</button>
+      <button class="tab-btn" onclick="toggleAddPanel()" id="add-panel-btn" style="background:var(--surface2);border-color:var(--accent);color:var(--accent);">＋ 銘柄追加</button>
+    </div>
+    <!-- Add Stock Panel -->
+    <div class="add-stock-panel hidden" id="add-stock-panel">
+      <div class="add-stock-input-wrap">
+        <input type="text" class="add-stock-input" id="add-stock-input" placeholder="銘柄コード or 銘柄名で検索" oninput="onAddInput()" onkeydown="onAddKey(event)" autocomplete="off">
+        <div class="add-suggestions hidden" id="add-suggestions"></div>
+      </div>
+      <div class="add-tag-select" id="add-tag-select">
+        <button class="add-tag-opt" data-tag="holding" onclick="toggleAddTag('holding')">💎保有銘柄</button>
+        <button class="add-tag-opt" data-tag="watch"   onclick="toggleAddTag('watch')">🦁学長銘柄</button>
+        <button class="add-tag-opt" data-tag="candidate" onclick="toggleAddTag('candidate')">候補</button>
+      </div>
+      <button class="add-stock-submit" onclick="submitAddStock()">追加</button>
     </div>
     <div class="filter-row">
       <span class="filter-label">ソート:</span>
@@ -1078,6 +1106,70 @@ document.getElementById('buy-yield-input').addEventListener('input', () => {
   buyYieldSet(currentCode, val);
   if (stock) updateBuyYield(stock);
 });
+
+// ════════════════════════════════════════════════
+//  Add Stock Panel
+// ════════════════════════════════════════════════
+let addSelectedCode = null;
+let addSelectedTags = new Set();
+
+function toggleAddPanel() {
+  const panel = document.getElementById('add-stock-panel');
+  panel.classList.toggle('hidden');
+  if (!panel.classList.contains('hidden')) {
+    document.getElementById('add-stock-input').focus();
+  }
+}
+
+function onAddInput() {
+  const q = document.getElementById('add-stock-input').value.trim().toLowerCase();
+  const box = document.getElementById('add-suggestions');
+  addSelectedCode = null;
+  if (!q || !stocksData) { box.classList.add('hidden'); return; }
+  const matches = stocksData.stocks.filter(s =>
+    s.code.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)
+  ).slice(0, 10);
+  if (!matches.length) { box.classList.add('hidden'); return; }
+  box.innerHTML = matches.map(s =>
+    `<div class="add-suggestion-item" onclick="selectAddStock('${s.code}','${s.name}')">${s.code} ${s.name}</div>`
+  ).join('');
+  box.classList.remove('hidden');
+}
+
+function onAddKey(e) {
+  if (e.key === 'Escape') document.getElementById('add-suggestions').classList.add('hidden');
+}
+
+function selectAddStock(code, name) {
+  addSelectedCode = code;
+  document.getElementById('add-stock-input').value = `${code} ${name}`;
+  document.getElementById('add-suggestions').classList.add('hidden');
+}
+
+function toggleAddTag(tag) {
+  if (addSelectedTags.has(tag)) addSelectedTags.delete(tag);
+  else addSelectedTags.add(tag);
+  document.querySelectorAll('#add-tag-select .add-tag-opt').forEach(btn => {
+    const t = btn.dataset.tag;
+    btn.className = `add-tag-opt${addSelectedTags.has(t) ? ` sel-${t}` : ''}`;
+  });
+}
+
+function submitAddStock() {
+  if (!addSelectedCode) { alert('銘柄を選択してください'); return; }
+  if (!addSelectedTags.size) { alert('タグを選択してください'); return; }
+  addSelectedTags.forEach(tag => tagSet(addSelectedCode, tag, true));
+  renderCards();
+  renderTabCounts();
+  // reset
+  addSelectedCode = null;
+  addSelectedTags.clear();
+  document.getElementById('add-stock-input').value = '';
+  document.querySelectorAll('#add-tag-select .add-tag-opt').forEach(btn => {
+    btn.className = 'add-tag-opt';
+  });
+  alert('追加しました');
+}
 
 // ════════════════════════════════════════════════
 //  Tag toggle
