@@ -255,7 +255,10 @@ select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1p
   <!-- Header -->
   <header>
     <h1>日本株 高配当トラッカー</h1>
-    <div class="header-meta" id="updated-label">データ未取得</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="header-meta" id="updated-label">データ未取得</div>
+      <button id="refresh-btn" onclick="refreshData()" title="データを手動更新" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:34px;height:34px;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">🔄</button>
+    </div>
   </header>
 
   <!-- Stats Bar -->
@@ -1385,6 +1388,18 @@ async function loadData() {
 }
 
 document.addEventListener('DOMContentLoaded', loadData);
+
+async function refreshData() {
+  const btn = document.getElementById('refresh-btn');
+  btn.style.animation = 'spin 0.8s linear infinite';
+  btn.disabled = true;
+  await loadData();
+  btn.style.animation = '';
+  btn.disabled = false;
+}
 </script>
+<style>
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
 </body>
 </html>
