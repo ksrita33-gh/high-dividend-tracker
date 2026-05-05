@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-04T15:36:40Z",
-  "vix": 18.35,
-  "vix_updated": "2026-05-04T15:36:40Z",
+  "updated": "2026-05-05T09:32:52Z",
+  "vix": 17.76,
+  "vix_updated": "2026-05-05T09:32:52Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -12,7 +12,7 @@
       "day_change": 4.59,
       "dividend_yield": 2.11,
       "annual_dividend": 110.0,
-      "market_cap": 19140643389440,
+      "market_cap": 19109362270208,
       "per": 29.7616,
       "pbr": 2.1247,
       "operating_margin": 1.757,
@@ -103,7 +103,7 @@
       "day_change": 2.53,
       "dividend_yield": 2.21,
       "annual_dividend": 44.0,
-      "market_cap": 13888831619072,
+      "market_cap": 13888956399616,
       "per": 14.9477,
       "pbr": 2.203,
       "operating_margin": 4.573,
@@ -194,7 +194,7 @@
       "day_change": -2.22,
       "dividend_yield": 1.99,
       "annual_dividend": 115.0,
-      "market_cap": 16338440421376,
+      "market_cap": 16339095781376,
       "per": 18.2813,
       "pbr": 1.9547,
       "operating_margin": 3.885,
@@ -378,9 +378,9 @@
       "market_cap": 8160556351488,
       "per": 13.6054,
       "pbr": 1.7989,
-      "operating_margin": 0.0,
+      "operating_margin": 5.425,
       "payout_ratio": 26.84,
-      "roe": null,
+      "roe": 12.635,
       "equity_ratio": 39.97,
       "operating_cf": 612281000000.0,
       "week52_high": 6840.0,
@@ -485,6 +485,7 @@
         3423103000000.0
       ],
       "eps_trend": [
+        301.55,
         241.52,
         196.82,
         171.8367
@@ -1559,7 +1560,7 @@
       "annual_dividend": 205.0,
       "market_cap": 2032317890560,
       "per": 9.5602,
-      "pbr": 0.7518,
+      "pbr": 0.7073,
       "operating_margin": 5.046,
       "payout_ratio": 32.32,
       "roe": 7.566,
@@ -2377,7 +2378,7 @@
       "annual_dividend": 70.0,
       "market_cap": 2003303661568,
       "per": 8.7951,
-      "pbr": 0.6658,
+      "pbr": 0.6383,
       "operating_margin": 6.275,
       "payout_ratio": 23.21,
       "roe": 7.736,
@@ -2464,7 +2465,7 @@
       "day_change": 3.46,
       "dividend_yield": null,
       "annual_dividend": 0.0,
-      "market_cap": 981731180544,
+      "market_cap": 981975564288,
       "per": null,
       "pbr": 0.2897,
       "operating_margin": 4.619,
@@ -2835,7 +2836,7 @@
       "payout_ratio": 49.9,
       "roe": 10.573,
       "equity_ratio": 41.56,
-      "operating_cf": null,
+      "operating_cf": 254059000000.0,
       "week52_high": 2929.0,
       "week52_low": 1784.5,
       "ma25": 2295.46,
@@ -3915,7 +3916,7 @@
       "day_change": -0.57,
       "dividend_yield": 2.89,
       "annual_dividend": 150.0,
-      "market_cap": 294537035776,
+      "market_cap": 294535462912,
       "per": 18.0177,
       "pbr": 0.9991,
       "operating_margin": 2.691,
@@ -4207,7 +4208,7 @@
       "eps_trend": [
         96.69,
         86.77,
-        78.46,
+        78.458,
         73.052
       ],
       "cash_trend": [
@@ -5839,6 +5840,7 @@
         13653445000.0
       ],
       "eps_trend": [
+        155.59,
         145.71,
         155.27
       ],
@@ -6549,6 +6551,7 @@
         17917892000.0
       ],
       "eps_trend": [
+        156.72,
         132.97,
         150.56
       ],
@@ -6820,6 +6823,7 @@
       ],
       "eps_trend": [
         60.44,
+        69.09,
         66.72,
         79.34
       ],
@@ -7527,7 +7531,7 @@
       "annual_dividend": 54.0,
       "market_cap": 79079809024,
       "per": 10.4495,
-      "pbr": 1.2436,
+      "pbr": 1.1736,
       "operating_margin": 9.098,
       "payout_ratio": 33.94,
       "roe": 12.098,
@@ -7621,7 +7625,7 @@
       "pbr": 2.194,
       "operating_margin": 27.357,
       "payout_ratio": 44.57,
-      "roe": 18.799,
+      "roe": 18.798,
       "equity_ratio": 75.36,
       "operating_cf": 2842000000.0,
       "week52_high": 1112.0,
@@ -8073,7 +8077,7 @@
       "annual_dividend": 70.0,
       "market_cap": 58453405696,
       "per": 13.6989,
-      "pbr": 1.6482,
+      "pbr": 1.6481,
       "operating_margin": 13.019,
       "payout_ratio": 50.07,
       "roe": 12.504,
@@ -9903,6 +9907,7 @@
       ],
       "eps_trend": [
         161.17,
+        148.63,
         143.2,
         129.74
       ],
@@ -10430,7 +10435,7 @@
       "annual_dividend": 38.0,
       "market_cap": 36807839744,
       "per": 11.4817,
-      "pbr": 0.8787,
+      "pbr": 0.8312,
       "operating_margin": 5.49,
       "payout_ratio": 43.63,
       "roe": 7.719,
