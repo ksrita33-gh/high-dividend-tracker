@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-14T09:21:00Z",
-  "vix": 17.79,
-  "vix_updated": "2026-05-14T09:21:00Z",
+  "updated": "2026-05-14T11:33:04Z",
+  "vix": 17.85,
+  "vix_updated": "2026-05-14T11:33:04Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -482,6 +482,7 @@
         3423103000000.0
       ],
       "eps_trend": [
+        301.55,
         241.52,
         196.82,
         171.8367
@@ -2832,7 +2833,7 @@
       "payout_ratio": 47.65,
       "roe": 10.573,
       "equity_ratio": 41.56,
-      "operating_cf": null,
+      "operating_cf": 254059000000.0,
       "week52_high": 2929.0,
       "week52_low": 1784.5,
       "ma25": 2284.1,
@@ -3461,7 +3462,7 @@
       "annual_dividend": 75.0,
       "market_cap": 3888394010624,
       "per": 14.3704,
-      "pbr": 1.0127,
+      "pbr": 1.0452,
       "operating_margin": 10.974,
       "payout_ratio": 31.16,
       "roe": 7.706,
@@ -5091,7 +5092,7 @@
       "annual_dividend": 105.0,
       "market_cap": 220494725120,
       "per": 9.8378,
-      "pbr": 1.0802,
+      "pbr": 1.1514,
       "operating_margin": 13.34,
       "payout_ratio": 40.96,
       "roe": 11.519,
