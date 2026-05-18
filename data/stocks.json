@@ -1,7 +1,7 @@
 {
-  "updated": "2026-05-18T10:52:08Z",
-  "vix": 19.23,
-  "vix_updated": "2026-05-18T10:52:08Z",
+  "updated": "2026-05-18T12:22:29Z",
+  "vix": 18.58,
+  "vix_updated": "2026-05-18T12:22:29Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -828,7 +828,7 @@
       "annual_dividend": 47.5,
       "market_cap": 3808326057984,
       "per": 12.1011,
-      "pbr": 1.1454,
+      "pbr": 1.0703,
       "operating_margin": 13.589,
       "payout_ratio": 40.97,
       "roe": 9.542,
