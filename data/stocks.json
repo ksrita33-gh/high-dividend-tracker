@@ -1,7 +1,7 @@
 {
-  "updated": "2026-07-01T10:34:49Z",
-  "vix": 16.84,
-  "vix_updated": "2026-07-01T10:34:49Z",
+  "updated": "2026-07-01T11:50:17Z",
+  "vix": 16.67,
+  "vix_updated": "2026-07-01T11:50:17Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -470,7 +470,7 @@
       "pbr": 1.5554,
       "operating_margin": 26.917,
       "payout_ratio": 38.12,
-      "roe": 9.776,
+      "roe": 10.299,
       "equity_ratio": 4.81,
       "operating_cf": -10283139000000.0,
       "week52_high": 6733.0,
@@ -653,7 +653,7 @@
       "equity_ratio": 5.16,
       "operating_cf": -23064420000000.0,
       "week52_high": 3394.0,
-      "week52_low": 1947.0,
+      "week52_low": 1956.0,
       "ma25": 3190.04,
       "ma75": 2941.26,
       "revenue_trend": [
@@ -1289,7 +1289,7 @@
       "equity_ratio": 37.05,
       "operating_cf": 619983000000.0,
       "week52_high": 1552.5,
-      "week52_low": 707.0,
+      "week52_low": 710.1,
       "ma25": 1244.52,
       "ma75": 1322.81,
       "revenue_trend": [
@@ -1379,7 +1379,7 @@
       "equity_ratio": 36.0,
       "operating_cf": 392429000000.0,
       "week52_high": 1671.0,
-      "week52_low": 867.2,
+      "week52_low": 871.1,
       "ma25": 1298.32,
       "ma75": 1395.6,
       "revenue_trend": [
@@ -3101,7 +3101,7 @@
       "equity_ratio": 29.98,
       "operating_cf": 436287000000.0,
       "week52_high": 1171.0,
-      "week52_low": 747.0,
+      "week52_low": 755.2,
       "ma25": 1092.4,
       "ma75": 1001.4,
       "revenue_trend": [
@@ -3192,7 +3192,7 @@
       "equity_ratio": 28.16,
       "operating_cf": 765072000000.0,
       "week52_high": 4211.0,
-      "week52_low": 3101.0,
+      "week52_low": 3121.0,
       "ma25": 3378.04,
       "ma75": 3529.8,
       "revenue_trend": [
@@ -4005,7 +4005,7 @@
       "equity_ratio": 67.07,
       "operating_cf": 3225066000.0,
       "week52_high": 4495.0,
-      "week52_low": 2006.0,
+      "week52_low": 2012.0,
       "ma25": 3679.2,
       "ma75": 2778.38,
       "revenue_trend": [
@@ -5365,7 +5365,7 @@
       "equity_ratio": 15.21,
       "operating_cf": -367537000000.0,
       "week52_high": 1541.5,
-      "week52_low": 1057.0,
+      "week52_low": 1064.5,
       "ma25": 1302.06,
       "ma75": 1377.63,
       "revenue_trend": [
@@ -5638,7 +5638,7 @@
       "equity_ratio": 37.58,
       "operating_cf": 224265000000.0,
       "week52_high": 4514.0,
-      "week52_low": 2444.5,
+      "week52_low": 2480.5,
       "ma25": 3874.92,
       "ma75": 3981.66,
       "revenue_trend": [
@@ -5727,7 +5727,7 @@
       "equity_ratio": 65.03,
       "operating_cf": 2448834000.0,
       "week52_high": 2627.0,
-      "week52_low": 2190.0,
+      "week52_low": 2191.0,
       "ma25": 2513.04,
       "ma75": 2415.38,
       "revenue_trend": [
@@ -6528,7 +6528,7 @@
       "equity_ratio": 79.54,
       "operating_cf": 2309404000.0,
       "week52_high": 2140.0,
-      "week52_low": 1429.0,
+      "week52_low": 1440.0,
       "ma25": 1810.52,
       "ma75": 1846.5,
       "revenue_trend": [
@@ -7251,7 +7251,7 @@
       "equity_ratio": 66.64,
       "operating_cf": 21594000000.0,
       "week52_high": 4200.0,
-      "week52_low": 3050.0,
+      "week52_low": 3095.0,
       "ma25": 3546.8,
       "ma75": 3590.07,
       "revenue_trend": [
@@ -8610,7 +8610,7 @@
       "equity_ratio": 67.99,
       "operating_cf": 8145000000.0,
       "week52_high": 1809.0,
-      "week52_low": 1373.0,
+      "week52_low": 1409.0,
       "ma25": 1644.84,
       "ma75": 1629.09,
       "revenue_trend": [
@@ -9327,7 +9327,7 @@
       "equity_ratio": 77.63,
       "operating_cf": 9938000000.0,
       "week52_high": 7310.0,
-      "week52_low": 6090.0,
+      "week52_low": 6150.0,
       "ma25": 6710.0,
       "ma75": 6641.08,
       "revenue_trend": [
@@ -10413,7 +10413,7 @@
       "equity_ratio": 62.07,
       "operating_cf": 3674000000.0,
       "week52_high": 983.0,
-      "week52_low": 784.0,
+      "week52_low": 785.0,
       "ma25": 861.32,
       "ma75": 886.23,
       "revenue_trend": [
