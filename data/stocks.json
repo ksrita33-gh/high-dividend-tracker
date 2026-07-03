@@ -1,7 +1,7 @@
 {
-  "updated": "2026-07-03T09:46:05Z",
-  "vix": 15.93,
-  "vix_updated": "2026-07-03T09:46:05Z",
+  "updated": "2026-07-03T11:25:22Z",
+  "vix": 15.99,
+  "vix_updated": "2026-07-03T11:25:22Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -1284,7 +1284,7 @@
       "market_cap": 3281632624640,
       "per": 12.7227,
       "pbr": 0.9747,
-      "operating_margin": 5.277,
+      "operating_margin": 4.069,
       "payout_ratio": 35.42,
       "roe": 8.5,
       "equity_ratio": 37.05,
@@ -6433,7 +6433,7 @@
       "market_cap": 366528069632,
       "per": 13.6642,
       "pbr": 2.8092,
-      "operating_margin": 10.46,
+      "operating_margin": 10.476,
       "payout_ratio": 40.19,
       "roe": 22.257,
       "equity_ratio": 56.22,
@@ -7340,7 +7340,7 @@
       "market_cap": 61607002112,
       "per": 13.2165,
       "pbr": 0.732,
-      "operating_margin": 6.208,
+      "operating_margin": 5.988,
       "payout_ratio": 47.38,
       "roe": 5.719,
       "equity_ratio": 68.22,
