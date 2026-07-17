@@ -1,7 +1,7 @@
 {
-  "updated": "2026-07-17T08:40:42Z",
-  "vix": 18.45,
-  "vix_updated": "2026-07-17T08:40:42Z",
+  "updated": "2026-07-17T10:31:44Z",
+  "vix": 18.11,
+  "vix_updated": "2026-07-17T10:31:44Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -484,6 +484,7 @@
         3719458000000.0
       ],
       "eps_trend": [
+        301.55,
         241.52,
         196.82
       ],
@@ -1553,7 +1554,7 @@
       "dividend_yield": 3.71,
       "annual_dividend": 205.0,
       "market_cap": 1927342194688,
-      "per": 9.0481,
+      "per": 9.0531,
       "pbr": 0.6705,
       "operating_margin": 5.058,
       "payout_ratio": 32.27,
@@ -1728,29 +1729,93 @@
     {
       "code": "2914.T",
       "name": "日本たばこ産業",
-      "sector": "",
-      "price": null,
-      "prev_close": null,
-      "day_change": null,
-      "dividend_yield": null,
-      "annual_dividend": null,
-      "market_cap": null,
-      "per": null,
-      "pbr": null,
-      "operating_margin": null,
-      "payout_ratio": null,
-      "roe": null,
-      "equity_ratio": null,
-      "operating_cf": null,
-      "week52_high": null,
-      "week52_low": null,
-      "ma25": null,
-      "ma75": null,
-      "revenue_trend": [],
-      "eps_trend": [],
-      "cash_trend": [],
-      "div_history": [],
-      "error": "object of type 'NoneType' has no len()"
+      "sector": "生活必需品",
+      "price": 6347.0,
+      "prev_close": 6195.0,
+      "day_change": 2.45,
+      "dividend_yield": 3.91,
+      "annual_dividend": 242.0,
+      "market_cap": 11268194828288,
+      "per": 22.5671,
+      "pbr": 2.758,
+      "operating_margin": 32.725,
+      "payout_ratio": 83.25,
+      "roe": 13.618,
+      "equity_ratio": 48.54,
+      "operating_cf": 514056000000.0,
+      "week52_high": 6474.0,
+      "week52_low": 4211.0,
+      "ma25": 6040.16,
+      "ma75": 5960.13,
+      "revenue_trend": [
+        3467675000000.0,
+        3056709000000.0,
+        2841077000000.0,
+        2657832000000.0
+      ],
+      "eps_trend": [
+        287.36,
+        100.95,
+        271.69,
+        249.45
+      ],
+      "cash_trend": [
+        831135000000.0,
+        1084567000000.0,
+        1040206000000.0,
+        866885000000.0
+      ],
+      "div_history": [
+        {
+          "date": "2020-12-30",
+          "amount": 77.0
+        },
+        {
+          "date": "2021-06-29",
+          "amount": 65.0
+        },
+        {
+          "date": "2021-12-29",
+          "amount": 75.0
+        },
+        {
+          "date": "2022-06-29",
+          "amount": 75.0
+        },
+        {
+          "date": "2022-12-29",
+          "amount": 113.0
+        },
+        {
+          "date": "2023-06-29",
+          "amount": 94.0
+        },
+        {
+          "date": "2023-12-28",
+          "amount": 100.0
+        },
+        {
+          "date": "2024-06-27",
+          "amount": 97.0
+        },
+        {
+          "date": "2024-12-27",
+          "amount": 97.0
+        },
+        {
+          "date": "2025-06-27",
+          "amount": 104.0
+        },
+        {
+          "date": "2025-12-29",
+          "amount": 130.0
+        },
+        {
+          "date": "2026-06-29",
+          "amount": 121.0
+        }
+      ],
+      "error": null
     },
     {
       "code": "8591.T",
@@ -5386,7 +5451,7 @@
       "dividend_yield": 3.07,
       "annual_dividend": 140.0,
       "market_cap": 6461211541504,
-      "per": 13.0681,
+      "per": 13.0761,
       "pbr": 1.0132,
       "operating_margin": -16.149,
       "payout_ratio": 36.45,
@@ -5766,6 +5831,7 @@
       ],
       "eps_trend": [
         170.35,
+        155.59,
         145.71,
         155.27
       ],
@@ -6477,6 +6543,7 @@
       ],
       "eps_trend": [
         164.12,
+        156.72,
         132.97,
         150.56
       ],
@@ -6748,6 +6815,7 @@
       ],
       "eps_trend": [
         60.44,
+        69.09,
         66.72,
         79.34
       ],
@@ -9821,6 +9889,7 @@
       ],
       "eps_trend": [
         161.17,
+        148.63,
         143.2,
         129.74
       ],
@@ -9989,7 +10058,7 @@
       "roe": 8.258,
       "equity_ratio": 27.68,
       "operating_cf": 61118000000.0,
-      "week52_high": 2186.0,
+      "week52_high": 2195.0,
       "week52_low": 1695.0,
       "ma25": 1982.34,
       "ma75": 1930.76,
