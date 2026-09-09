@@ -1,7 +1,7 @@
 {
-  "updated": "2026-09-09T11:50:13Z",
-  "vix": 16.41,
-  "vix_updated": "2026-09-09T11:50:13Z",
+  "updated": "2026-09-09T13:14:07Z",
+  "vix": 16.24,
+  "vix_updated": "2026-09-09T13:14:07Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -555,7 +555,7 @@
       "day_change": -1.43,
       "dividend_yield": 1.74,
       "annual_dividend": 150.0,
-      "market_cap": 20517094424576,
+      "market_cap": 20594045222912,
       "per": 15.1182,
       "pbr": 1.7917,
       "operating_margin": 46.686,
@@ -731,275 +731,83 @@
     {
       "code": "8308.T",
       "name": "りそなホールディングス",
-      "sector": "金融サービス",
-      "price": 2412.0,
-      "prev_close": 2491.0,
-      "day_change": -3.17,
-      "dividend_yield": 1.49,
-      "annual_dividend": 37.0,
-      "market_cap": 5386872029184,
-      "per": 21.1876,
-      "pbr": 1.7981,
-      "operating_margin": 40.371,
-      "payout_ratio": 25.48,
-      "roe": 9.23,
-      "equity_ratio": 3.81,
-      "operating_cf": -4737585000000.0,
-      "week52_high": 2601.0,
-      "week52_low": 1401.5,
-      "ma25": 2433.36,
-      "ma75": 2277.72,
-      "revenue_trend": [
-        1026905000000.0,
-        879798000000.0,
-        769427000000.0,
-        748474000000.0
-      ],
-      "eps_trend": [
-        113.82,
-        92.4,
-        67.78,
-        67.49
-      ],
-      "cash_trend": [
-        13785507000000.0,
-        19548812000000.0,
-        20924259000000.0,
-        22391508000000.0
-      ],
-      "div_history": [
-        {
-          "date": "2020-09-29",
-          "amount": 10.5
-        },
-        {
-          "date": "2021-03-30",
-          "amount": 10.5
-        },
-        {
-          "date": "2021-09-29",
-          "amount": 10.5
-        },
-        {
-          "date": "2022-03-30",
-          "amount": 10.5
-        },
-        {
-          "date": "2022-09-29",
-          "amount": 10.5
-        },
-        {
-          "date": "2023-03-30",
-          "amount": 10.5
-        },
-        {
-          "date": "2023-09-28",
-          "amount": 11.0
-        },
-        {
-          "date": "2024-03-28",
-          "amount": 11.0
-        },
-        {
-          "date": "2024-09-27",
-          "amount": 11.5
-        },
-        {
-          "date": "2025-03-28",
-          "amount": 13.5
-        },
-        {
-          "date": "2025-09-29",
-          "amount": 14.5
-        },
-        {
-          "date": "2026-03-30",
-          "amount": 14.5
-        }
-      ],
-      "error": null
+      "sector": "",
+      "price": null,
+      "prev_close": null,
+      "day_change": null,
+      "dividend_yield": null,
+      "annual_dividend": null,
+      "market_cap": null,
+      "per": null,
+      "pbr": null,
+      "operating_margin": null,
+      "payout_ratio": null,
+      "roe": null,
+      "equity_ratio": null,
+      "operating_cf": null,
+      "week52_high": null,
+      "week52_low": null,
+      "ma25": null,
+      "ma75": null,
+      "revenue_trend": [],
+      "eps_trend": [],
+      "cash_trend": [],
+      "div_history": [],
+      "error": "Too Many Requests. Rate limited. Try after a while."
     },
     {
       "code": "8309.T",
       "name": "三井住友トラスト・ホールディングス",
-      "sector": "金融サービス",
-      "price": 1730.0,
-      "prev_close": 1756.5,
-      "day_change": -1.51,
-      "dividend_yield": 2.7,
-      "annual_dividend": 47.5,
-      "market_cap": 4764319875072,
-      "per": 13.0971,
-      "pbr": 1.2997,
-      "operating_margin": 39.499,
-      "payout_ratio": 35.03,
-      "roe": 10.779,
-      "equity_ratio": 4.33,
-      "operating_cf": 1220375000000.0,
-      "week52_high": 1822.5,
-      "week52_low": 1003.0,
-      "ma25": 1736.24,
-      "ma75": 1616.59,
-      "revenue_trend": [
-        1552023000000.0,
-        1514183000000.0,
-        1213661000000.0,
-        1138454000000.0
-      ],
-      "eps_trend": [
-        112.95,
-        89.8925,
-        27.29,
-        64.6425
-      ],
-      "cash_trend": [
-        24040669000000.0,
-        25173611000000.0,
-        22831653000000.0,
-        21602473000000.0
-      ],
-      "div_history": [
-        {
-          "date": "2020-09-29",
-          "amount": 9.375
-        },
-        {
-          "date": "2021-03-30",
-          "amount": 9.375
-        },
-        {
-          "date": "2021-09-29",
-          "amount": 10.0
-        },
-        {
-          "date": "2022-03-30",
-          "amount": 11.25
-        },
-        {
-          "date": "2022-09-29",
-          "amount": 12.5
-        },
-        {
-          "date": "2023-03-30",
-          "amount": 13.75
-        },
-        {
-          "date": "2023-09-28",
-          "amount": 13.75
-        },
-        {
-          "date": "2024-03-28",
-          "amount": 13.75
-        },
-        {
-          "date": "2024-09-27",
-          "amount": 18.125
-        },
-        {
-          "date": "2025-03-28",
-          "amount": 20.625
-        },
-        {
-          "date": "2025-09-29",
-          "amount": 20.0
-        },
-        {
-          "date": "2026-03-30",
-          "amount": 26.25
-        }
-      ],
-      "error": null
+      "sector": "",
+      "price": null,
+      "prev_close": null,
+      "day_change": null,
+      "dividend_yield": null,
+      "annual_dividend": null,
+      "market_cap": null,
+      "per": null,
+      "pbr": null,
+      "operating_margin": null,
+      "payout_ratio": null,
+      "roe": null,
+      "equity_ratio": null,
+      "operating_cf": null,
+      "week52_high": null,
+      "week52_low": null,
+      "ma25": null,
+      "ma75": null,
+      "revenue_trend": [],
+      "eps_trend": [],
+      "cash_trend": [],
+      "div_history": [],
+      "error": "Too Many Requests. Rate limited. Try after a while."
     },
     {
       "code": "9434.T",
       "name": "ソフトバンク",
-      "sector": "通信サービス",
-      "price": 239.2,
-      "prev_close": 241.0,
-      "day_change": -0.75,
-      "dividend_yield": 3.65,
-      "annual_dividend": 8.8,
-      "market_cap": 11441825382400,
-      "per": 21.2057,
-      "pbr": 3.9299,
-      "operating_margin": 16.525,
-      "payout_ratio": 76.31,
-      "roe": 16.712,
-      "equity_ratio": 15.99,
-      "operating_cf": 1367871000000.0,
-      "week52_high": 242.6,
-      "week52_low": 202.6,
-      "ma25": 235.54,
-      "ma75": 222.12,
-      "revenue_trend": [
-        7038680000000.0,
-        6544349000000.0,
-        6084002000000.0,
-        5911999000000.0
-      ],
-      "eps_trend": [
-        11.35,
-        10.99,
-        10.317,
-        11.253
-      ],
-      "cash_trend": [
-        1438799000000.0,
-        1435525000000.0,
-        1992873000000.0,
-        2059167000000.0
-      ],
-      "div_history": [
-        {
-          "date": "2020-09-29",
-          "amount": 4.3
-        },
-        {
-          "date": "2021-03-30",
-          "amount": 4.3
-        },
-        {
-          "date": "2021-09-29",
-          "amount": 4.3
-        },
-        {
-          "date": "2022-03-30",
-          "amount": 4.3
-        },
-        {
-          "date": "2022-09-29",
-          "amount": 4.3
-        },
-        {
-          "date": "2023-03-30",
-          "amount": 4.3
-        },
-        {
-          "date": "2023-09-28",
-          "amount": 4.3
-        },
-        {
-          "date": "2024-03-28",
-          "amount": 4.3
-        },
-        {
-          "date": "2024-09-27",
-          "amount": 4.3
-        },
-        {
-          "date": "2025-03-28",
-          "amount": 4.3
-        },
-        {
-          "date": "2025-09-29",
-          "amount": 4.3
-        },
-        {
-          "date": "2026-03-30",
-          "amount": 4.3
-        }
-      ],
-      "error": null
+      "sector": "",
+      "price": null,
+      "prev_close": null,
+      "day_change": null,
+      "dividend_yield": null,
+      "annual_dividend": null,
+      "market_cap": null,
+      "per": null,
+      "pbr": null,
+      "operating_margin": null,
+      "payout_ratio": null,
+      "roe": null,
+      "equity_ratio": null,
+      "operating_cf": null,
+      "week52_high": null,
+      "week52_low": null,
+      "ma25": null,
+      "ma75": null,
+      "revenue_trend": [],
+      "eps_trend": [],
+      "cash_trend": [],
+      "div_history": [],
+      "error": "Expecting value: line 1 column 1 (char 0)"
     },
     {
       "code": "9433.T",
@@ -1101,7 +909,7 @@
       "day_change": 0.12,
       "dividend_yield": 3.14,
       "annual_dividend": 5.4,
-      "market_cap": 13953010761728,
+      "market_cap": 13983158370304,
       "per": 13.6558,
       "pbr": 1.4223,
       "operating_margin": 12.453,
@@ -2736,7 +2544,7 @@
       "day_change": 0.37,
       "dividend_yield": 3.84,
       "annual_dividend": 67.0,
-      "market_cap": 1330328240128,
+      "market_cap": 1330555518976,
       "per": 11.1401,
       "pbr": 1.4043,
       "operating_margin": 25.898,
@@ -8166,7 +7974,7 @@
       "day_change": -1.34,
       "dividend_yield": 3.9,
       "annual_dividend": 90.0,
-      "market_cap": 64736083968,
+      "market_cap": 64736100352,
       "per": 15.0852,
       "pbr": 0.8186,
       "operating_margin": 1.012,
@@ -8803,7 +8611,7 @@
       "day_change": -0.24,
       "dividend_yield": 4.06,
       "annual_dividend": 50.0,
-      "market_cap": 82520809472,
+      "market_cap": 82522578944,
       "per": 12.3456,
       "pbr": 1.2606,
       "operating_margin": 10.092,
@@ -8976,7 +8784,7 @@
       "day_change": 0.14,
       "dividend_yield": 3.66,
       "annual_dividend": 130.0,
-      "market_cap": 105518628864,
+      "market_cap": 105344188416,
       "per": 27.1383,
       "pbr": 1.4272,
       "operating_margin": 11.483,
@@ -10793,7 +10601,7 @@
       "day_change": -0.8,
       "dividend_yield": 3.9,
       "annual_dividend": 68.0,
-      "market_cap": 146116673536,
+      "market_cap": 146923601920,
       "per": 12.6047,
       "pbr": 1.1823,
       "operating_margin": 7.05,
