@@ -1,7 +1,7 @@
 {
-  "updated": "2026-09-11T11:47:23Z",
-  "vix": 17.08,
-  "vix_updated": "2026-09-11T11:47:23Z",
+  "updated": "2026-09-11T13:06:15Z",
+  "vix": 16.25,
+  "vix_updated": "2026-09-11T13:06:15Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -203,7 +203,7 @@
       "equity_ratio": 42.11,
       "operating_cf": 952912000000.0,
       "week52_high": 6675.0,
-      "week52_low": 3594.0,
+      "week52_low": 3600.0,
       "ma25": 4974.2,
       "ma75": 4854.11,
       "revenue_trend": [
@@ -1747,7 +1747,7 @@
       "equity_ratio": 48.54,
       "operating_cf": 514056000000.0,
       "week52_high": 7218.0,
-      "week52_low": 4707.0,
+      "week52_low": 4723.0,
       "ma25": 6923.4,
       "ma75": 6438.16,
       "revenue_trend": [
