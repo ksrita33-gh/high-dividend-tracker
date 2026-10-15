@@ -1,7 +1,7 @@
 {
-  "updated": "2026-10-15T12:04:52Z",
-  "vix": 17.35,
-  "vix_updated": "2026-10-15T12:04:52Z",
+  "updated": "2026-10-15T13:48:06Z",
+  "vix": 17.69,
+  "vix_updated": "2026-10-15T13:48:06Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -7622,7 +7622,7 @@
       "day_change": -1.82,
       "dividend_yield": 3.64,
       "annual_dividend": 29.0,
-      "market_cap": 33202370560,
+      "market_cap": 33156763648,
       "per": 12.4024,
       "pbr": 2.0258,
       "operating_margin": 23.059,
