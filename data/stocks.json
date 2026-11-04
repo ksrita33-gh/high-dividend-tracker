@@ -1,7 +1,7 @@
 {
-  "updated": "2026-11-04T09:43:56Z",
-  "vix": 18.78,
-  "vix_updated": "2026-11-04T09:43:56Z",
+  "updated": "2026-11-04T14:52:47Z",
+  "vix": 17.5,
+  "vix_updated": "2026-11-04T14:52:47Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -215,7 +215,7 @@
       "eps_trend": [
         291.12,
         306.73,
-        352.8,
+        360.91,
         360.91
       ],
       "cash_trend": [
@@ -377,10 +377,10 @@
       "annual_dividend": 44.0,
       "market_cap": 7816058241024,
       "per": 12.186,
-      "pbr": 1.7048,
-      "operating_margin": 5.304,
+      "pbr": 1.652,
+      "operating_margin": 4.741,
       "payout_ratio": 29.0,
-      "roe": 13.605,
+      "roe": 13.622,
       "equity_ratio": 33.94,
       "operating_cf": 813456000000.0,
       "week52_high": 1943.75,
@@ -1669,7 +1669,7 @@
       "eps_trend": [
         210.42,
         460.11,
-        141.37,
+        145.24,
         857.01
       ],
       "cash_trend": [
@@ -2032,7 +2032,7 @@
       ],
       "eps_trend": [
         3.28,
-        70.18,
+        70.184,
         119.318,
         150.732
       ],
@@ -2197,7 +2197,7 @@
       "market_cap": 10523994226688,
       "per": 295.1613,
       "pbr": 1.4191,
-      "operating_margin": 24.377,
+      "operating_margin": 24.551,
       "payout_ratio": 905.02,
       "roe": 0.564,
       "equity_ratio": 47.9,
@@ -2213,7 +2213,7 @@
         4027478000000.0
       ],
       "eps_trend": [
-        -96.75,
+        121.75,
         68.36,
         92.09,
         204.29
@@ -3656,7 +3656,7 @@
       "equity_ratio": 49.5,
       "operating_cf": 33230000000.0,
       "week52_high": 3058.0,
-      "week52_low": 2206.5,
+      "week52_low": 2228.0,
       "ma25": 2547.6,
       "ma75": 2563.8,
       "revenue_trend": [
@@ -3741,9 +3741,9 @@
       "market_cap": 71490789376,
       "per": 21.7386,
       "pbr": 1.4289,
-      "operating_margin": 5.396,
+      "operating_margin": 5.318,
       "payout_ratio": 77.51,
-      "roe": 6.721,
+      "roe": 7.416,
       "equity_ratio": 78.49,
       "operating_cf": 4667000000.0,
       "week52_high": 2005.0,
@@ -5578,7 +5578,7 @@
       "eps_trend": [
         230.86,
         257.32,
-        158.0,
+        158.5992,
         281.09
       ],
       "cash_trend": [
@@ -5832,9 +5832,9 @@
       "market_cap": 34366197760,
       "per": 12.2217,
       "pbr": 1.2391,
-      "operating_margin": 19.192,
+      "operating_margin": 19.924,
       "payout_ratio": 51.3,
-      "roe": 9.969,
+      "roe": 10.205,
       "equity_ratio": 89.7,
       "operating_cf": 3382978000.0,
       "week52_high": 2620.0,
@@ -6186,7 +6186,7 @@
       "equity_ratio": 76.69,
       "operating_cf": 11045000000.0,
       "week52_high": 3147.5,
-      "week52_low": 1397.5,
+      "week52_low": 1430.0,
       "ma25": 2110.04,
       "ma75": 2219.89,
       "revenue_trend": [
@@ -6362,7 +6362,7 @@
       "market_cap": 73994182656,
       "per": 13.7507,
       "pbr": 1.0643,
-      "operating_margin": 10.444,
+      "operating_margin": 10.478,
       "payout_ratio": 55.45,
       "roe": 7.831,
       "equity_ratio": 80.61,
@@ -6639,7 +6639,7 @@
       "equity_ratio": 61.23,
       "operating_cf": 56522000000.0,
       "week52_high": 4608.0,
-      "week52_low": 2945.0,
+      "week52_low": 3006.0,
       "ma25": 4253.28,
       "ma75": 4149.55,
       "revenue_trend": [
@@ -7181,7 +7181,7 @@
       "roe": 22.597,
       "equity_ratio": 74.19,
       "operating_cf": 1809198000.0,
-      "week52_high": 2011.0,
+      "week52_high": 2010.0,
       "week52_low": 1212.0,
       "ma25": 1504.8,
       "ma75": 1487.79,
@@ -7921,7 +7921,7 @@
       ],
       "eps_trend": [
         129.82,
-        106.89,
+        106.8333,
         90.06,
         79.05
       ],
@@ -9625,9 +9625,9 @@
       "market_cap": 40655380480,
       "per": null,
       "pbr": 0.7732,
-      "operating_margin": -5.333,
+      "operating_margin": 6.112,
       "payout_ratio": 29.9,
-      "roe": 7.417,
+      "roe": 7.411,
       "equity_ratio": 74.82,
       "operating_cf": 2819000000.0,
       "week52_high": 3340.0,
@@ -10278,7 +10278,7 @@
       ],
       "eps_trend": [
         111.65,
-        84.31,
+        84.305,
         61.5175,
         61.95
       ],
@@ -10813,7 +10813,7 @@
       "equity_ratio": 59.9,
       "operating_cf": 10469000000.0,
       "week52_high": 1891.0,
-      "week52_low": 1437.0,
+      "week52_low": 1450.0,
       "ma25": 1627.16,
       "ma75": 1702.27,
       "revenue_trend": [
