@@ -1,7 +1,7 @@
 {
-  "updated": "2026-11-09T16:51:14Z",
-  "vix": 20.92,
-  "vix_updated": "2026-11-09T16:51:14Z",
+  "updated": "2026-11-09T19:18:17Z",
+  "vix": 20.15,
+  "vix_updated": "2026-11-09T19:18:17Z",
   "stocks": [
     {
       "code": "8058.T",
@@ -6020,8 +6020,8 @@
       "operating_cf": null,
       "week52_high": 2249.5,
       "week52_low": 1780.5,
-      "ma25": 1806.33,
-      "ma75": 1893.79,
+      "ma25": 1805.56,
+      "ma75": 1892.37,
       "revenue_trend": [],
       "eps_trend": [],
       "cash_trend": [],
